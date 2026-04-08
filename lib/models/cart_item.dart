@@ -10,4 +10,3 @@ class CartItem {
   });
 
   double get totalPrice => medicine.price * quantity;
-}
