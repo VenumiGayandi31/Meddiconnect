@@ -4,20 +4,36 @@ import '../models/order_model.dart';
 import '../services/database_service.dart';
 import 'order_details_screen.dart';
 
+// OOP Concepts Used:
+// - Encapsulation: Private variables like _dbService and _isUpdating manage internal state
+// - Inheritance: Extends StatefulWidget to create a dynamic UI component
+// - Abstraction: Database operations and UI logic are separated into methods
+// - Polymorphism: Method overriding (createState, build)
+
 class PharmacistOrdersScreen extends StatefulWidget {
   const PharmacistOrdersScreen({super.key});
 
   @override
+  // Creates the state object for this widget
   State<PharmacistOrdersScreen> createState() => _PharmacistOrdersScreenState();
 }
 
+// OOP Concepts Used:
+// - Encapsulation: Internal state like _isUpdating is controlled within the class
+// - Inheritance: Extends State class
+// - Abstraction: UI rendering and logic handled through methods
 class _PharmacistOrdersScreenState extends State<PharmacistOrdersScreen> {
+
+  // Service used to interact with database operations (fetching and updating orders)
   final DatabaseService _dbService = DatabaseService();
+
+  // Tracks whether an order update operation is currently in progress
   bool _isUpdating = false;
 
-  
+  // Stores the main theme color used across the UI
   final Color darkGray = const Color(0xFF343A40);
 
+  // Updates the status of an order in the database and shows feedback to the user
   Future<void> _updateStatus(OrderModel order, String newStatus) async {
     setState(() => _isUpdating = true);
     try {
@@ -53,6 +69,7 @@ class _PharmacistOrdersScreenState extends State<PharmacistOrdersScreen> {
   }
 
   @override
+  // Builds the UI for displaying pharmacist orders with real-time updates
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -131,6 +148,8 @@ class _PharmacistOrdersScreenState extends State<PharmacistOrdersScreen> {
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
                   final order = orders[index];
+
+                  // Checks whether the current order is still pending
                   final bool isPending = order.status == 'Pending';
 
                   return Container(
@@ -241,16 +260,17 @@ class _PharmacistOrdersScreenState extends State<PharmacistOrdersScreen> {
                                   ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
-            );
-          },
-        ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
+          // Displays loading overlay when updating order status
           if (_isUpdating)
             Container(
               color: Colors.black.withOpacity(0.1),
@@ -263,6 +283,7 @@ class _PharmacistOrdersScreenState extends State<PharmacistOrdersScreen> {
     );
   }
 
+  // Builds a styled status badge based on the order status
   Widget _buildStatusBadge(String status) {
     Color color;
     IconData icon;
