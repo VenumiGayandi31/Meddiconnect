@@ -4,34 +4,60 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 
+// OOP Concepts Used:
+// - Encapsulation: Data like _markers, _pharmacies, _currentPosition are kept private within the class
+// - Inheritance: StatefulWidget and State classes are inherited
+// - Abstraction: Complex logic (location handling, Firestore, map) is hidden behind methods
+// - Polymorphism: Method overriding (createState, build, initState, dispose)
+
 class FindPharmacyScreen extends StatefulWidget {
   const FindPharmacyScreen({super.key});
 
   @override
+  // Creates the mutable state for this widget
   State<FindPharmacyScreen> createState() => _FindPharmacyScreenState();
 }
 
+// OOP Concepts Used:
+// - Encapsulation: Private state variables control data internally
+// - Inheritance: Extends State class
+// - Abstraction: UI and logic separated into methods
 class _FindPharmacyScreenState extends State<FindPharmacyScreen> {
+
+  // Stores the Google Map controller to control map actions like camera movement
   GoogleMapController? _mapController;
+
+  // Stores the user's current GPS position
   Position? _currentPosition;
+
+  // Stores all map markers using MarkerId as key
   final Map<MarkerId, Marker> _markers = {};
+
+  // Stores list of pharmacy data fetched from Firestore
   List<Map<String, dynamic>> _pharmacies = [];
+
+  // Indicates whether the screen is still loading
   bool _isLoading = true;
+
+  // Stores Firestore stream subscription to listen for real-time updates
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _pharmacySub;
 
   @override
+  // Called when widget is first created; initializes location and pharmacy loading
   void initState() {
     super.initState();
     _initLocationAndPharmacies();
   }
 
   @override
+  // Cleans up resources when widget is removed
   void dispose() {
     _pharmacySub?.cancel();
     _mapController?.dispose();
     super.dispose();
   }
 
+  // Handles location permission, fetches current location, and starts loading pharmacies
   Future<void> _initLocationAndPharmacies() async {
     try {
       
@@ -74,7 +100,7 @@ class _FindPharmacyScreenState extends State<FindPharmacyScreen> {
     }
   }
 
-  
+  // Fetches pharmacy data from Firestore and updates markers and list in real-time
   void _loadPharmacies() {
     _pharmacySub?.cancel();
     _pharmacySub = FirebaseFirestore.instance
@@ -128,6 +154,7 @@ class _FindPharmacyScreenState extends State<FindPharmacyScreen> {
     });
   }
 
+  // Calculates distance (in KM) between user and a pharmacy
   double? _distanceKm(Map<String, dynamic> data) {
     if (_currentPosition == null) return null;
     final lat = data['latitude'];
@@ -142,6 +169,7 @@ class _FindPharmacyScreenState extends State<FindPharmacyScreen> {
     return meters / 1000.0;
   }
 
+  // Displays bottom sheet with sorted list of nearby pharmacies
   void _showPharmacyListSheet() {
     if (!mounted) return;
     final list = List<Map<String, dynamic>>.from(_pharmacies);
@@ -245,6 +273,7 @@ class _FindPharmacyScreenState extends State<FindPharmacyScreen> {
   }
 
   @override
+  // Builds the main UI of the screen
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -278,7 +307,7 @@ class _FindPharmacyScreenState extends State<FindPharmacyScreen> {
                         style: null, 
                       ),
                 
-                
+                // Custom positioned container for status UI
                 PositionContainer(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: Column(
@@ -293,6 +322,7 @@ class _FindPharmacyScreenState extends State<FindPharmacyScreen> {
     );
   }
 
+  // Builds the bottom status card showing number of pharmacies
   Widget _buildStatusCard() {
     final count = _markers.length;
     return InkWell(
@@ -326,13 +356,19 @@ class _FindPharmacyScreenState extends State<FindPharmacyScreen> {
   }
 }
 
+// Custom widget to position child at bottom of screen
 class PositionContainer extends StatelessWidget {
+
+  // Child widget to display inside positioned container
   final Widget child;
+
+  // Padding applied to the container
   final EdgeInsets padding;
 
   const PositionContainer({super.key, required this.child, required this.padding});
 
   @override
+  // Builds positioned widget at bottom of screen
   Widget build(BuildContext context) {
     return Positioned(
       bottom: 20,
