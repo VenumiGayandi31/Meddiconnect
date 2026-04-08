@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "580464650162",
+    "project_id": "mediconnect-new-7ce7a",
+    "storage_bucket": "mediconnect-new-7ce7a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580464650162:android:b56708d7f7796fdc8326ab",
+        "android_client_info": {
+          "package_name": "com.example.medi_connect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUWJsZI3_nfICyP68zu0DS_7VHc1sZd6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
