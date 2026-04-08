@@ -3,16 +3,30 @@ import 'pharmacist_stock_screen.dart';
 import 'pharmacist_orders_screen.dart';
 import 'pharmacist_profile_screen.dart';
 
+// OOP Concepts Used:
+// - Encapsulation: Private variables like _currentIndex and _pages are managed داخل class
+// - Inheritance: Extends StatefulWidget to create a dynamic UI component
+// - Abstraction: Navigation logic is separated and hidden inside this class
+// - Polymorphism: Method overriding (createState and build)
+
 class PharmacistMainHolder extends StatefulWidget {
   const PharmacistMainHolder({super.key});
 
   @override
+  // Creates and returns the state object for this widget
   State<PharmacistMainHolder> createState() => _PharmacistMainHolderState();
 }
 
+// OOP Concepts Used:
+// - Encapsulation: Maintains internal state (_currentIndex)
+// - Inheritance: Extends State class
+// - Abstraction: UI rendering and navigation handled inside methods
 class _PharmacistMainHolderState extends State<PharmacistMainHolder> {
+
+  // Stores the currently selected index of the bottom navigation bar
   int _currentIndex = 0;
 
+  // Stores the list of pages/screens displayed in the IndexedStack
   final List<Widget> _pages = [
     const PharmacistStockScreen(),
     const PharmacistOrdersScreen(),
@@ -20,6 +34,7 @@ class _PharmacistMainHolderState extends State<PharmacistMainHolder> {
   ];
 
   @override
+  // Builds the main UI including bottom navigation and page switching
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
